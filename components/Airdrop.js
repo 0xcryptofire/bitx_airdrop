@@ -602,6 +602,13 @@ export default function Airdrop() {
                   ) : (
                     <button
                       onClick={() => {
+                        if (!address) {
+                          toast.error(
+                            "Please input addess and check eligibility"
+                          );
+                          return;
+                        }
+
                         if (registered && address) {
                           createOrder();
                         } else {
