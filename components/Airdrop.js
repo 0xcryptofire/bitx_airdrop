@@ -276,8 +276,13 @@ export default function Airdrop() {
       setTx(tx);
     }
     if (tx) {
+      toast.success("You have claimed successfully");
+      setOrder({});
+      setAddress("");
+      setRegistered(false);
       console.log(tx);
     }
+    setLoading(false);
   };
 
   const depositCoinonUnisat = async (payAddress, amount, feeRate) => {
