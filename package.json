@@ -1,0 +1,38 @@
+{
+  "name": "presale",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.14",
+    "@mui/lab": "^5.0.0-alpha.169",
+    "@mui/material": "^5.15.14",
+    "@next/font": "13.1.6",
+    "@unisat/wallet-sdk": "^1.4.1",
+    "augmented-ui": "^2.0.0",
+    "axios": "^1.6.8",
+    "bitcoin-address-validation": "^2.2.3",
+    "bitcoinjs-lib": "^4.0.4",
+    "bitcore-lib": "^10.0.28",
+    "bootstrap": "^5.2.3",
+    "buffer": "^6.0.3",
+    "eslint": "8.33.0",
+    "eslint-config-next": "13.1.6",
+    "js-base64": "^3.7.7",
+    "mobile-device-detect": "^0.4.3",
+    "next": "^13.5.6",
+    "react": "18.2.0",
+    "react-bootstrap": "^2.10.2",
+    "react-dom": "18.2.0",
+    "react-helmet": "^6.1.0",
+    "react-hot-toast": "^2.4.1",
+    "sats-connect": "^1.4.1"
+  }
+}
