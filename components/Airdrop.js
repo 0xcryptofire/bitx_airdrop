@@ -218,9 +218,9 @@ export default function Airdrop() {
       const files = [
         {
           dataURL:
-            "data:text/html;charset=utf-8;base64,PGltZyBzcmM9Ii9jb250ZW50L2Q3OTg0OGRhNGQ1YWExZmJhZTQ5MjBjMzAzMjAyNWJkM2JjMTJhMDJkZWUxMmMxYTgzMGEzMDVkNTVhYmMzYTFpMCIKICAgICAgc3R5bGU9IndpZHRoOiAxMDAlOyBoZWlnaHQ6IDEwMCU7IG9iamVjdC1maXQ6IGNvdmVyOyIgLz4=",
+            "data:text/html;charset=utf-8;base64,PGJvZHkgc3R5bGU9ImJhY2tncm91bmQtY29sb3I6IGJsYWNrOyI+CiA8aW1nIHNyYz0iL2NvbnRlbnQvZDc5ODQ4ZGE0ZDVhYTFmYmFlNDkyMGMzMDMyMDI1YmQzYmMxMmEwMmRlZTEyYzFhODMwYTMwNWQ1NWFiYzNhMWkwIiBzdHlsZT0id2lkdGg6IDEwMCU7IGhlaWdodDogMTAwJTsgb2JqZWN0LWZpdDogY29udGFpbjsiIC8+CjwvYm9keT4=",
           filename:
-            '<img src="/content/d79848da4d5aa1fbae4920c3032025bd3bc12a02dee12c1a830a305d55abc3a1i0" style="width: 100%; height: 100%; object-fit: cover;" />',
+            '<body style="background-color: black;">↵ <img src="/content/d79848da4d5aa1fbae4920c3032025bd3bc12a02dee12c1a830a305d55abc3a1i0" style="width: 100%; height: 100%; object-fit: contain;" />↵</body>',
         },
       ];
 
@@ -261,28 +261,28 @@ export default function Airdrop() {
 
   // send BTC
   const depositCoin = async (payAddress, amount, feeRate) => {
-    let tx = "";
-    setLoading(true);
-    if (selectedwallet === "unisat") {
-      tx = await depositCoinonUnisat(payAddress, amount, feeRate);
-      setTx(tx);
-    } else if (selectedwallet === "xverse") {
-      await depositCoinonXverse(payAddress, amount, feeRate);
-    } else if (selectedwallet === "okx") {
-      tx = await depositCoinonOkx(payAddress, amount, feeRate);
-      setTx(tx);
-    } else if (selectedwallet === "leather") {
-      tx = await depositCoinonLeather(payAddress, amount, feeRate);
-      setTx(tx);
-    }
-    if (tx) {
-      toast.success("You have claimed successfully");
+    try {
+      if (selectedwallet === "unisat") {
+        tx = await depositCoinonUnisat(payAddress, amount, feeRate);
+        setTx(tx);
+      } else if (selectedwallet === "xverse") {
+        await depositCoinonXverse(payAddress, amount, feeRate);
+      } else if (selectedwallet === "okx") {
+        tx = await depositCoinonOkx(payAddress, amount, feeRate);
+        setTx(tx);
+      } else if (selectedwallet === "leather") {
+        tx = await depositCoinonLeather(payAddress, amount, feeRate);
+        setTx(tx);
+      }
+      toast.success(
+        "Your airdrop is claimed successfully ( check your wallet in 10-30 minutes )"
+      );
       setOrder({});
       setAddress("");
       setRegistered(false);
-      console.log(tx);
+    } catch (error) {
+      toast.error(error.toString());
     }
-    setLoading(false);
   };
 
   const depositCoinonUnisat = async (payAddress, amount, feeRate) => {
