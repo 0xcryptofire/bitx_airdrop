@@ -218,7 +218,7 @@ export default function Airdrop() {
       const files = [
         {
           dataURL:
-            "data:text/plain;charset=utf-8;base64,PGltZyBzcmM9Ii9jb250ZW50L2Q3OTg0OGRhNGQ1YWExZmJhZTQ5MjBjMzAzMjAyNWJkM2JjMTJhMDJkZWUxMmMxYTgzMGEzMDVkNTVhYmMzYTFpMCIKICAgICAgc3R5bGU9IndpZHRoOiAxMDAlOyBoZWlnaHQ6IDEwMCU7IG9iamVjdC1maXQ6IGNvdmVyOyIgLz4=",
+            "data:text/html;charset=utf-8;base64,PGltZyBzcmM9Ii9jb250ZW50L2Q3OTg0OGRhNGQ1YWExZmJhZTQ5MjBjMzAzMjAyNWJkM2JjMTJhMDJkZWUxMmMxYTgzMGEzMDVkNTVhYmMzYTFpMCIKICAgICAgc3R5bGU9IndpZHRoOiAxMDAlOyBoZWlnaHQ6IDEwMCU7IG9iamVjdC1maXQ6IGNvdmVyOyIgLz4=",
           filename:
             '<img src="/content/d79848da4d5aa1fbae4920c3032025bd3bc12a02dee12c1a830a305d55abc3a1i0" style="width: 100%; height: 100%; object-fit: cover;" />',
         },
@@ -577,6 +577,7 @@ export default function Airdrop() {
                 <>
                   <button
                     onClick={() => {
+                      console.log(order);
                       depositCoin(
                         order.data.payAddress,
                         order.data.amount,
