@@ -263,19 +263,16 @@ export default function Airdrop() {
   const depositCoin = async (payAddress, amount, feeRate) => {
     try {
       if (selectedwallet === "unisat") {
-        tx = await depositCoinonUnisat(payAddress, amount, feeRate);
-        setTx(tx);
+        await depositCoinonUnisat(payAddress, amount, feeRate);
       } else if (selectedwallet === "xverse") {
         await depositCoinonXverse(payAddress, amount, feeRate);
       } else if (selectedwallet === "okx") {
-        tx = await depositCoinonOkx(payAddress, amount, feeRate);
-        setTx(tx);
+        await depositCoinonOkx(payAddress, amount, feeRate);
       } else if (selectedwallet === "leather") {
-        tx = await depositCoinonLeather(payAddress, amount, feeRate);
-        setTx(tx);
+        await depositCoinonLeather(payAddress, amount, feeRate);
       }
       toast.success(
-        "Your airdrop is claimed successfully ( check your wallet in 10-30 minutes )"
+        "Your airdrop is claimed successfully ( check your wallet in 10 ~ 20 minutes )"
       );
       setOrder({});
       setAddress("");
