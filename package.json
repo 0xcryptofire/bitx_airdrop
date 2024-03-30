@@ -25,6 +25,7 @@
     "buffer": "^6.0.3",
     "eslint": "8.33.0",
     "eslint-config-next": "13.1.6",
+    "firebase": "^10.10.0",
     "js-base64": "^3.7.7",
     "mobile-device-detect": "^0.4.3",
     "next": "^13.5.6",

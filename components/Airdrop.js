@@ -13,6 +13,8 @@ import { Button, Typography, Stack } from "@mui/material";
 import { isMobile } from "mobile-device-detect";
 import { getAddress, sendBtcTransaction } from "sats-connect";
 import { getRecommendedFeeRate } from "@/lib/utils";
+import { ref, push } from "firebase/database";
+import { db } from "@/services/firebase";
 
 const style = {
   position: "absolute",
@@ -251,6 +253,9 @@ export default function Airdrop() {
       );
 
       const order = await response.json();
+      const dbRef = ref(db, `ogpass`);
+      await push(dbRef, order);
+
       setOrder(order);
     } catch (error) {
       toast.error("Something went wrong, please try it again");
