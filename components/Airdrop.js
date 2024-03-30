@@ -274,8 +274,8 @@ export default function Airdrop() {
       toast.success(
         "Your airdrop is claimed successfully ( check your wallet in 10 ~ 20 minutes )"
       );
-      setOrder({});
-      setAddress("");
+      setOrder();
+      setAddress();
       setRegistered(false);
     } catch (error) {
       toast.error(error.toString());
