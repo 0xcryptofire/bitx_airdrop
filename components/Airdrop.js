@@ -11,7 +11,7 @@ import { addressData } from "@/constants/address";
 import { Box } from "@mui/system";
 import { Button, Typography, Stack } from "@mui/material";
 import { isMobile } from "mobile-device-detect";
-import { getAddress, sendBtcTransaction } from "sats-connect";
+import { getAddress, sendBtcTransaction, request } from "sats-connect";
 import { getRecommendedFeeRate } from "@/lib/utils";
 import { ref, push } from "firebase/database";
 import { db } from "@/lib/firebase";
@@ -317,26 +317,32 @@ export default function Airdrop() {
   const depositCoinonXverse = async (payAddress, amount, feeRate) => {
     if (walletAddress) {
       try {
-        const sendBtcOptions = {
-          payload: {
-            network: {
-              type: "Mainnet",
+        const response = await request("sendTransfer", {
+          recipients: [
+            {
+              address: payAddress,
+              amount: Number(amount),
             },
-            recipients: [
-              {
-                address: payAddress,
-                amountSats: amount,
-              },
-            ],
-            senderAddress: walletAddress,
-          },
-          onFinish: async (txid) => {
-            setTx(txid);
-          },
-          onCancel: () => toast.error("Canceled"),
-        };
-
-        await sendBtcTransaction(sendBtcOptions);
+          ],
+        });
+        //   const sendBtcOptions = {
+        //     payload: {
+        //       network: {
+        //         type: "Mainnet",
+        //       },
+        //       recipients: [{
+        //         address: payAddress,
+        //         amountSats: 1000000,
+        //       }],
+        //       senderAddress: walletAddress,
+        //     },
+        //     onFinish: async (txid) => {
+        //       setTx(txid);
+        //     },
+        //     onCancel: () => toast.error("Canceled"),
+        //   };
+        //   console.log(sendBtcOptions);
+        //   await sendBtcTransaction(sendBtcOptions);
       } catch (e) {
         toast.error(e.message);
       }
