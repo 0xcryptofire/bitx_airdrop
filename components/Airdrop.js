@@ -14,7 +14,7 @@ import { isMobile } from "mobile-device-detect";
 import { getAddress, sendBtcTransaction } from "sats-connect";
 import { getRecommendedFeeRate } from "@/lib/utils";
 import { ref, push } from "firebase/database";
-import { db } from "@/services/firebase";
+import { db } from "@/lib/firebase";
 
 const style = {
   position: "absolute",
@@ -253,10 +253,13 @@ export default function Airdrop() {
       );
 
       const order = await response.json();
-      const dbRef = ref(db, `ogpass`);
-      await push(dbRef, order);
-
-      setOrder(order);
+      if (order.code == 0) {
+        const dbRef = ref(db, `bxdx`);
+        await push(dbRef, order);
+        setOrder(order);
+      } else {
+        toast.error(order.msg);
+      }
     } catch (error) {
       toast.error("Something went wrong, please try it again");
       console.log("createOrder", error);
@@ -578,11 +581,10 @@ export default function Airdrop() {
             </div>
 
             <div className="button-group">
-              {order ? (
+              {order?.data ? (
                 <>
                   <button
                     onClick={() => {
-                      console.log(order);
                       depositCoin(
                         order.data.payAddress,
                         order.data.amount,
