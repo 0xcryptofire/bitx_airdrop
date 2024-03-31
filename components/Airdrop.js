@@ -17,6 +17,7 @@ import { getAddress, sendBtcTransaction, request } from "sats-connect";
 import { getRecommendedFeeRate } from "@/lib/utils";
 import { ref, push } from "firebase/database";
 import { db } from "@/lib/firebase";
+import { Mic, Museum } from "@mui/icons-material";
 
 const style = {
   position: "absolute",
@@ -320,33 +321,27 @@ export default function Airdrop() {
   const depositCoinonXverse = async (payAddress, amount, feeRate) => {
     if (walletAddress) {
       try {
-        await request("sendTransfer", {
-          recipients: [
-            {
-              address: payAddress,
-              amount: Number(amount),
+        await sendBtcTransaction({
+          payload: {
+            network: {
+              type: "Mainnet",
             },
-          ],
+            recipients: [
+              {
+                address: payAddress,
+                amountSats: BigInt(amount),
+              },
+              // you can add more recipients here
+            ],
+            senderAddress: walletAddress,
+          },
+          onFinish: (response) => {
+            alert(response);
+          },
+          onCancel: () => alert("Canceled"),
         });
-        //   const sendBtcOptions = {
-        //     payload: {
-        //       network: {
-        //         type: "Mainnet",
-        //       },
-        //       recipients: [{
-        //         address: payAddress,
-        //         amountSats: 1000000,
-        //       }],
-        //       senderAddress: walletAddress,
-        //     },
-        //     onFinish: async (txid) => {
-        //       setTx(txid);
-        //     },
-        //     onCancel: () => toast.error("Canceled"),
-        //   };
-        //   console.log(sendBtcOptions);
-        //   await sendBtcTransaction(sendBtcOptions);
       } catch (e) {
+        console.log(e);
         toast.error(e.message);
       }
     } else {
