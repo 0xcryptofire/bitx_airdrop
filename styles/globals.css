@@ -688,3 +688,13 @@ box-sizing: border-box;
   justify-content: center;
   align-items: center;
 }
+
+.flex {
+  display: flex;
+  width: 100%;
+  gap: 6px;
+}
+
+.refund {
+  /* color: rgba(182, 11, 11, 0.788)!important; */
+}

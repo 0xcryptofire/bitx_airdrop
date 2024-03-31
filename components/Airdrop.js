@@ -9,15 +9,20 @@ import toast, { Toaster } from "react-hot-toast";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { validate } from "bitcoin-address-validation";
-import { addressData } from "@/constants/address";
 import { Box } from "@mui/system";
 import { Button, Typography, Stack } from "@mui/material";
 import { isMobile } from "mobile-device-detect";
-import { getAddress, sendBtcTransaction, request } from "sats-connect";
+import { getAddress, sendBtcTransaction } from "sats-connect";
 import { getRecommendedFeeRate } from "@/lib/utils";
-import { ref, push } from "firebase/database";
+import {
+  ref,
+  push,
+  query,
+  orderByChild,
+  equalTo,
+  get,
+} from "firebase/database";
 import { db } from "@/lib/firebase";
-import { Mic, Museum } from "@mui/icons-material";
 
 const style = {
   position: "absolute",
@@ -69,6 +74,10 @@ export default function Airdrop() {
 
   const [loading, setLoading] = useState(false);
   const [order, setOrder] = useState();
+
+  const [refundAddress, setRefundAddress] = useState("");
+  const [refund, setRefund] = useState(false);
+
   const [tx, setTx] = useState();
 
   const open = Boolean(anchorEl);
@@ -288,14 +297,12 @@ export default function Airdrop() {
       } else if (selectedwallet === "leather") {
         res = await depositCoinonLeather(payAddress, amount, feeRate);
       }
-      if (res) {
-        toast.success(
-          "Your airdrop is claimed successfully ( check your wallet in 10 ~ 20 minutes )"
-        );
-        setOrder();
-        setAddress("");
-        setRegistered(false);
-      }
+      toast.success(
+        "Your airdrop is claimed successfully ( check your wallet in 10 ~ 20 minutes )"
+      );
+      setOrder();
+      setAddress("");
+      setRegistered(false);
     } catch (error) {
       toast.error(error.toString());
     }
@@ -355,7 +362,7 @@ export default function Airdrop() {
         const tx = await window.okxwallet.bitcoin.send({
           from: walletAddress,
           to: payAddress,
-          value: amount,
+          value: amount / 10 ** 8,
         });
         return tx.txhash;
       } else {
@@ -380,6 +387,62 @@ export default function Airdrop() {
     } else {
       toast.error("Please connect wallet");
     }
+  };
+
+  const handleRefund = async () => {
+    try {
+      if (refundAddress) {
+        setLoading(true);
+        const dbQuery = query(
+          ref(db, `bxdx`),
+          orderByChild("data/payAddress"),
+          equalTo(refundAddress)
+        );
+
+        const snapshot = await get(dbQuery);
+        const exist = snapshot.val();
+
+        if (exist) {
+          const key = Object.keys(exist)[0];
+          const order = exist[key];
+          if (order?.code === 0) {
+            // Make API call to create the order
+            const response = await fetch(
+              `https://open-api.unisat.io/v2/inscribe/order/${order.data.orderId}/refund`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer 26de7ec501a3b6ff3eadc0214ee46516606cd92cda0dbef50e35fad98a511148`,
+                  accept: "application/json",
+                },
+                body: JSON.stringify({
+                  refundFeeRate: 10,
+                }),
+              }
+            );
+
+            const data = await response.json();
+            if (data.code == 0) {
+              toast.success("Refunded successfully");
+            } else {
+              if (data.msg == "Error: No input #0") {
+                toast.error("You did not make any payment on the addressF");
+              } else {
+                toast.error(data.msg);
+              }
+            }
+          } else {
+            toast.error("Invalid Order");
+          }
+        } else {
+          toast.error("Can not find the inscribe funding address.");
+        }
+      }
+    } catch (error) {
+      toast.error(error.toString());
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -528,122 +591,198 @@ export default function Airdrop() {
             data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
             className="card-main"
           >
-            <div
-              data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
-              className="input-grp"
-            >
-              <div className="input-head">
-                <span className="input-title">Enter your address</span>
-              </div>
+            {refund ? (
+              <>
+                <div
+                  data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
+                  className="input-grp"
+                >
+                  <div className="input-head">
+                    <span className="input-title">
+                      Enter the inscribe funding address
+                    </span>
+                  </div>
 
-              <div className="input-group-inline">
-                <input
-                  placeholder="Address"
-                  type="numbers"
-                  value={address}
-                  onChange={(e) => handleChangeAddress(e.target.value)}
-                />
-              </div>
-            </div>
+                  <div className="input-group-inline">
+                    <input
+                      placeholder="Address"
+                      type="numbers"
+                      value={refundAddress}
+                      onChange={(e) => setRefundAddress(e.target.value)}
+                    />
+                  </div>
+                </div>
 
-            <div className="info-group">
-              <div className="sub-info">
-                <div className="info">Your address:</div>
-                <div>
-                  {address ? (
-                    <>
-                      {validated ? (
-                        <>{truncateAddress(address)}</>
+                <div className="flex gap-2 w-full">
+                  <div className="button-group">
+                    <button
+                      onClick={() => {
+                        setRefund(false);
+                      }}
+                      data-augmented-ui="tl-clip tr-clip br-clip bl-clip"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+
+                  <div className="button-group">
+                    {loading ? (
+                      <button
+                        className="claim claim-loading"
+                        data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
+                      >
+                        <CircularProgress color="inherit" size={20} />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          if (!refundAddress) {
+                            toast.error(
+                              "Please input the inscribe funding address"
+                            );
+                          }
+                          handleRefund();
+                        }}
+                        className="claim"
+                        data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
+                      >
+                        Submit
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                {" "}
+                <div
+                  data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
+                  className="input-grp"
+                >
+                  <div className="input-head">
+                    <span className="input-title">Enter your address</span>
+                  </div>
+
+                  <div className="input-group-inline">
+                    <input
+                      placeholder="Address"
+                      type="numbers"
+                      value={address}
+                      onChange={(e) => handleChangeAddress(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="info-group">
+                  <div className="sub-info">
+                    <div className="info">Your address:</div>
+                    <div>
+                      {address ? (
+                        <>
+                          {validated ? (
+                            <>{truncateAddress(address)}</>
+                          ) : (
+                            <>Invalid address</>
+                          )}
+                        </>
                       ) : (
-                        <>Invalid address</>
+                        <></>
+                      )}
+                    </div>
+                  </div>
+
+                  {checked ? (
+                    <>
+                      {registered ? (
+                        <div className="sub-info">
+                          <div>
+                            Your address is registered. You will get an airdrop.
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="sub-info">
+                          Your address is not registered.
+                        </div>
                       )}
                     </>
                   ) : (
                     <></>
                   )}
                 </div>
-              </div>
-
-              {checked ? (
-                <>
-                  {registered ? (
-                    <div className="sub-info">
-                      <div>
-                        Your address is registered. You will get an airdrop.
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="sub-info">
-                      Your address is not registered.
-                    </div>
-                  )}
-                </>
-              ) : (
-                <></>
-              )}
-            </div>
-
-            <div className="button-group">
-              <button
-                data-augmented-ui="tl-clip tr-clip br-clip bl-clip"
-                onClick={checkEligibility}
-              >
-                Check eligibility
-              </button>
-            </div>
-
-            <div className="button-group">
-              {order?.data ? (
-                <>
+                <div className="button-group">
                   <button
-                    onClick={() => {
-                      depositCoin(
-                        order.data.payAddress,
-                        order.data.amount,
-                        order.data.feeRate
-                      );
-                    }}
-                    className="claim"
-                    data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
+                    data-augmented-ui="tl-clip tr-clip br-clip bl-clip"
+                    onClick={checkEligibility}
                   >
-                    Pay {order.data.amount / 10 ** 8} to claim
+                    Check eligibility
                   </button>
-                </>
-              ) : (
-                <>
-                  {loading ? (
-                    <button
-                      className="claim claim-loading"
-                      data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
-                    >
-                      Creating Order...
-                      <CircularProgress color="inherit" size={20} />
-                    </button>
-                  ) : (
+                </div>
+                <div className="flex">
+                  <div className="button-group">
                     <button
                       onClick={() => {
-                        if (!address) {
-                          toast.error(
-                            "Please input addess and check eligibility"
-                          );
-                          return;
-                        }
-
-                        if (registered && address) {
-                          createOrder();
-                        } else {
-                          toast.error("Your address is not registered.");
-                        }
+                        setRefund(true);
                       }}
-                      className="claim"
+                      className="claim refund"
                       data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
                     >
-                      Claim
+                      Refund
                     </button>
-                  )}
-                </>
-              )}
-            </div>
+                  </div>
+                  <div className="button-group">
+                    {order?.data ? (
+                      <>
+                        <button
+                          onClick={() => {
+                            depositCoin(
+                              order.data.payAddress,
+                              order.data.amount,
+                              order.data.feeRate
+                            );
+                          }}
+                          className="claim"
+                          data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
+                        >
+                          Pay {order.data.amount / 10 ** 8} to claim
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        {loading ? (
+                          <button
+                            className="claim claim-loading"
+                            data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
+                          >
+                            Creating Order...
+                            <CircularProgress color="inherit" size={20} />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              if (!address) {
+                                toast.error(
+                                  "Please input addess and check eligibility"
+                                );
+                                return;
+                              }
+
+                              if (registered && address) {
+                                createOrder();
+                              } else {
+                                toast.error("Your address is not registered.");
+                              }
+                            }}
+                            className="claim"
+                            data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
+                          >
+                            Claim
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
