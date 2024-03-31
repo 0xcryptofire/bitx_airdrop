@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -137,7 +137,6 @@ export default function Airdrop() {
           },
         },
         onFinish: (response) => {
-          console.log(response);
           setWalletAddress(response.addresses[0].address);
           setConnected(true);
           setOpen(false);
@@ -158,7 +157,7 @@ export default function Airdrop() {
         toast.error("OKX is not installed!");
       } else {
         const result = await window.okxwallet.bitcoin.connect();
-        setAddress(result.address);
+        setWalletAddress(result.address);
         setConnected(true);
         setOpen(false);
         setSelectedwallet("okx");
@@ -177,7 +176,7 @@ export default function Airdrop() {
         const usersNativeSegwitAddress = userAddresses.result.addresses.find(
           (address) => address.type === "p2wpkh"
         );
-        setAddress(usersNativeSegwitAddress.address);
+        setWalletAddress(usersNativeSegwitAddress.address);
         setConnected(true);
         setOpen(false);
         setSelectedwallet("leather");
@@ -199,6 +198,11 @@ export default function Airdrop() {
   };
 
   const DisconnectWallet = () => {
+    setChecked(false);
+    setValidated(false);
+    setOrder();
+    setAddress();
+    setRegistered(false);
     setConnected(false);
     handleClose();
   };
@@ -326,7 +330,6 @@ export default function Airdrop() {
             ],
             senderAddress: walletAddress,
           },
-
           onFinish: async (txid) => {
             setTx(txid);
           },
@@ -356,7 +359,6 @@ export default function Airdrop() {
       }
     } catch (error) {
       console.log("depositCoinonOkx", error);
-      console.log(error);
     }
   };
 
@@ -375,6 +377,12 @@ export default function Airdrop() {
       toast.error("Please connect wallet");
     }
   };
+
+  useEffect(() => {
+    if (!address || !registered) {
+      setOrder();
+    }
+  }, [address, registered]);
 
   return (
     <>
