@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Menu from "@mui/material/Menu";
