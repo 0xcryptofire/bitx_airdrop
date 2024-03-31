@@ -96,9 +96,10 @@ export default function Airdrop() {
   const checkEligibility = () => {
     if (validated) {
       if (address) {
-        for (let i = 0; i < addressData.length; i++) {
-          if (addressData[i] === address) setRegistered(true);
-        }
+        setRegistered(true);
+        // for (let i = 0; i < addressData.length; i++) {
+        //   if (addressData[i] === address) setRegistered(true);
+        // }
       }
       setChecked(true);
     }
