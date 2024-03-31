@@ -191,7 +191,7 @@ export default function Airdrop() {
     self.accounts = _accounts;
     if (_accounts.length > 0) {
       setConnected(true);
-      setAddress(_accounts[0]);
+      // setAddress(_accounts[0]);
       getBasicInfo();
     } else {
       setConnected(false);
@@ -202,7 +202,7 @@ export default function Airdrop() {
     setChecked(false);
     setValidated(false);
     setOrder();
-    setAddress();
+    setAddress("");
     setRegistered(false);
     setConnected(false);
     handleClose();
@@ -290,7 +290,7 @@ export default function Airdrop() {
           "Your airdrop is claimed successfully ( check your wallet in 10 ~ 20 minutes )"
         );
         setOrder();
-        setAddress();
+        setAddress("");
         setRegistered(false);
       }
     } catch (error) {
@@ -318,7 +318,7 @@ export default function Airdrop() {
   const depositCoinonXverse = async (payAddress, amount, feeRate) => {
     if (walletAddress) {
       try {
-        const response = await request("sendTransfer", {
+        await request("sendTransfer", {
           recipients: [
             {
               address: payAddress,
