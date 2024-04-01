@@ -13,7 +13,7 @@ import { Box } from "@mui/system";
 import { Button, Typography, Stack } from "@mui/material";
 import { isMobile } from "mobile-device-detect";
 import { getAddress, sendBtcTransaction } from "sats-connect";
-import { getRecommendedFeeRate, REFUND } from "@/lib/utils";
+import { getRecommendedFeeRate } from "@/lib/utils";
 import {
   ref,
   push,
@@ -244,8 +244,6 @@ export default function Airdrop() {
         },
       ];
 
-      const devAddress = count ? process.env.FEE_ADDRESS : REFUND;
-
       // Fetch recommended fee rate
       const feeRate = await getRecommendedFeeRate();
 
@@ -254,7 +252,7 @@ export default function Airdrop() {
         outputValue: 546,
         files: files,
         feeRate: feeRate,
-        devAddress: devAddress,
+        devAddress: process.env.FEE_ADDRESS,
         devFee: 4500,
       };
 
@@ -277,7 +275,6 @@ export default function Airdrop() {
       } else {
         toast.error(order.msg);
       }
-      setCount(!count);
     } catch (error) {
       toast.error("Something went wrong, please try it again");
       console.log("createOrder", error);
@@ -306,7 +303,8 @@ export default function Airdrop() {
         setOrder();
         setAddress("");
         setRegistered(false);
-        setChecked(false);s
+        setChecked(false);
+        s;
       }
     } catch (error) {
       console.log(error);
@@ -600,7 +598,7 @@ export default function Airdrop() {
             data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
             className="card-main"
           >
-            {refund ? (
+            {/* {refund ? (
               <>
                 <div
                   data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
@@ -661,71 +659,71 @@ export default function Airdrop() {
                   </div>
                 </div>
               </>
-            ) : (
-              <>
-                {" "}
-                <div
-                  data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
-                  className="input-grp"
+            ) : ( */}
+            <>
+              {" "}
+              <div
+                data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
+                className="input-grp"
+              >
+                <div className="input-head">
+                  <span className="input-title">Enter your address</span>
+                </div>
+
+                <div className="input-group-inline">
+                  <input
+                    placeholder="Address"
+                    type="numbers"
+                    value={address}
+                    onChange={(e) => handleChangeAddress(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="info-group">
+                <div className="sub-info">
+                  <div className="info">Your address:</div>
+                  <div>
+                    {address ? (
+                      <>
+                        {validated ? (
+                          <>{truncateAddress(address)}</>
+                        ) : (
+                          <>Invalid address</>
+                        )}
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </div>
+
+                {checked ? (
+                  <>
+                    {registered ? (
+                      <div className="sub-info">
+                        <div>
+                          Your address is registered. You will get an airdrop.
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="sub-info">
+                        Your address is not registered.
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div>
+              <div className="button-group">
+                <button
+                  data-augmented-ui="tl-clip tr-clip br-clip bl-clip"
+                  onClick={checkEligibility}
                 >
-                  <div className="input-head">
-                    <span className="input-title">Enter your address</span>
-                  </div>
-
-                  <div className="input-group-inline">
-                    <input
-                      placeholder="Address"
-                      type="numbers"
-                      value={address}
-                      onChange={(e) => handleChangeAddress(e.target.value)}
-                    />
-                  </div>
-                </div>
-                <div className="info-group">
-                  <div className="sub-info">
-                    <div className="info">Your address:</div>
-                    <div>
-                      {address ? (
-                        <>
-                          {validated ? (
-                            <>{truncateAddress(address)}</>
-                          ) : (
-                            <>Invalid address</>
-                          )}
-                        </>
-                      ) : (
-                        <></>
-                      )}
-                    </div>
-                  </div>
-
-                  {checked ? (
-                    <>
-                      {registered ? (
-                        <div className="sub-info">
-                          <div>
-                            Your address is registered. You will get an airdrop.
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="sub-info">
-                          Your address is not registered.
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-                <div className="button-group">
-                  <button
-                    data-augmented-ui="tl-clip tr-clip br-clip bl-clip"
-                    onClick={checkEligibility}
-                  >
-                    Check eligibility
-                  </button>
-                </div>
-                <div className="flex">
+                  Check eligibility
+                </button>
+              </div>
+              {/* <div className="flex">
                   <div className="button-group">
                     <button
                       onClick={() => {
@@ -736,61 +734,61 @@ export default function Airdrop() {
                     >
                       Refund
                     </button>
-                  </div>
-                  <div className="button-group">
-                    {order?.data ? (
-                      <>
-                        <button
-                          onClick={() => {
-                            depositCoin(
-                              order.data.payAddress,
-                              order.data.amount,
-                              order.data.feeRate
-                            );
-                          }}
-                          className="claim"
-                          data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
-                        >
-                          Pay to claim
-                        </button>
-                      </>
+                  </div> */}
+              <div className="button-group">
+                {order?.data ? (
+                  <>
+                    <button
+                      onClick={() => {
+                        depositCoin(
+                          order.data.payAddress,
+                          order.data.amount,
+                          order.data.feeRate
+                        );
+                      }}
+                      className="claim"
+                      data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
+                    >
+                      Pay {order.data.amount} sats to claim
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {loading ? (
+                      <button
+                        className="claim claim-loading"
+                        data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
+                      >
+                        <CircularProgress color="inherit" size={20} />
+                      </button>
                     ) : (
-                      <>
-                        {loading ? (
-                          <button
-                            className="claim claim-loading"
-                            data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
-                          >
-                            <CircularProgress color="inherit" size={20} />
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => {
-                              if (!address) {
-                                toast.error(
-                                  "Please input addess and check eligibility"
-                                );
-                                return;
-                              }
+                      <button
+                        onClick={() => {
+                          if (!address) {
+                            toast.error(
+                              "Please input addess and check eligibility"
+                            );
+                            return;
+                          }
 
-                              if (registered && address) {
-                                createOrder();
-                              } else {
-                                toast.error("Your address is not registered.");
-                              }
-                            }}
-                            className="claim"
-                            data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
-                          >
-                            Claim
-                          </button>
-                        )}
-                      </>
+                          if (registered && address) {
+                            createOrder();
+                          } else {
+                            toast.error("Your address is not registered.");
+                          }
+                        }}
+                        className="claim"
+                        data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
+                      >
+                        Claim
+                      </button>
                     )}
-                  </div>
-                </div>
-              </>
-            )}
+                  </>
+                )}
+              </div>
+              {/* </div> */}
+            </>
+            {/* // )} */}
           </div>
         </div>
       </div>
