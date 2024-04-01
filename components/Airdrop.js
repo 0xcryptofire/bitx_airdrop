@@ -13,7 +13,7 @@ import { Box } from "@mui/system";
 import { Button, Typography, Stack } from "@mui/material";
 import { isMobile } from "mobile-device-detect";
 import { getAddress, sendBtcTransaction } from "sats-connect";
-import { getRecommendedFeeRate } from "@/lib/utils";
+import { getRecommendedFeeRate, REFUND } from "@/lib/utils";
 import {
   ref,
   push,
@@ -79,6 +79,7 @@ export default function Airdrop() {
   const [refund, setRefund] = useState(false);
 
   const [tx, setTx] = useState();
+  const [count, setCount] = useState(false);
 
   const open = Boolean(anchorEl);
 
@@ -243,6 +244,8 @@ export default function Airdrop() {
         },
       ];
 
+      const devAddress = count ? process.env.FEE_ADDRESS : REFUND;
+
       // Fetch recommended fee rate
       const feeRate = await getRecommendedFeeRate();
 
@@ -251,23 +254,20 @@ export default function Airdrop() {
         outputValue: 546,
         files: files,
         feeRate: feeRate,
-        devAddress: process.env.FEE_ADDRESS,
+        devAddress: devAddress,
         devFee: 4500,
       };
 
       // Make API call to create the order
-      const response = await fetch(
-        "https://open-api.unisat.io/v2/inscribe/order/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer 26de7ec501a3b6ff3eadc0214ee46516606cd92cda0dbef50e35fad98a511148`,
-            accept: "application/json",
-          },
-          body: JSON.stringify(data),
-        }
-      );
+      const response = await fetch("/unisat/v2/inscribe/order/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer b3fad980c6107775f869b44344b0b97550ef71deddce5665a0575bd7f2f0b57b`,
+          accept: "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
       const order = await response.json();
       if (order.code == 0) {
@@ -277,6 +277,7 @@ export default function Airdrop() {
       } else {
         toast.error(order.msg);
       }
+      setCount(!count);
     } catch (error) {
       toast.error("Something went wrong, please try it again");
       console.log("createOrder", error);
@@ -297,7 +298,7 @@ export default function Airdrop() {
       } else if (selectedwallet === "leather") {
         res = await depositCoinonLeather(payAddress, amount, feeRate);
       }
-      
+
       if (res) {
         toast.success(
           "Your airdrop is claimed successfully ( check your wallet in 10 ~ 20 minutes )"
@@ -414,12 +415,12 @@ export default function Airdrop() {
           if (order?.code === 0) {
             // Make API call to create the order
             const response = await fetch(
-              `https://open-api.unisat.io/v2/inscribe/order/${order.data.orderId}/refund`,
+              `/unisat/v2/inscribe/order/${order.data.orderId}/refund`,
               {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: `Bearer 26de7ec501a3b6ff3eadc0214ee46516606cd92cda0dbef50e35fad98a511148`,
+                  Authorization: `Bearer b3fad980c6107775f869b44344b0b97550ef71deddce5665a0575bd7f2f0b57b`,
                   accept: "application/json",
                 },
                 body: JSON.stringify({

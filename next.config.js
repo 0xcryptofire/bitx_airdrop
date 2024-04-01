@@ -4,6 +4,14 @@ const nextConfig = {
   env: {
     FEE_ADDRESS: "bc1q2uun5ykztlw4kqcgdtm4xy0hx7tyvymdsfzdtz",
   },
+  async rewrites() {
+    return [
+      {
+        source: "/unisat/:slug*",
+        destination: "https://open-api.unisat.io/:slug*",
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
