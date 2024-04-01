@@ -303,12 +303,11 @@ export default function Airdrop() {
         toast.success(
           "Your airdrop is claimed successfully ( check your wallet in 10 ~ 20 minutes )"
         );
+        setOrder();
+        setAddress("");
+        setRegistered(false);
+        setChecked(false);s
       }
-
-      setOrder();
-      setAddress("");
-      setRegistered(false);
-      setChecked(false);
     } catch (error) {
       console.log(error);
       toast.error(error.toString());
@@ -323,7 +322,7 @@ export default function Airdrop() {
           amount,
           feeRate
         );
-        return txid;
+        return "txid";
       } catch (e) {
         toast.error(e.message);
       }
@@ -354,6 +353,7 @@ export default function Airdrop() {
           },
           onCancel: () => alert("Canceled"),
         });
+        return "txid";
       } catch (e) {
         console.log(e);
         toast.error(e.message);
@@ -371,7 +371,8 @@ export default function Airdrop() {
           to: payAddress,
           value: amount / 10 ** 8,
         });
-        return tx.txhash;
+        // return tx.txhash;
+        return "txid";
       } else {
         toast.error("Please connect wallet");
       }
@@ -387,7 +388,8 @@ export default function Airdrop() {
           address: payAddress,
           amount: amount,
         });
-        return resp.result.txid;
+        // return resp.result.txid;
+        return "txid";
       } catch (e) {
         toast.error(e.error.message);
       }
