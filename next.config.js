@@ -2,12 +2,12 @@
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    FEE_ADDRESS: "bc1qfc6vus8uxd33crhw9x54zyk7nkmu4u4zzt0p9g",
+    FEE_ADDRESS: "bc1q2uun5ykztlw4kqcgdtm4xy0hx7tyvymdsfzdtz",
   },
   async rewrites() {
     return [
       {
-        source: "/unisat/:slug*",
+        source: "/inscribe-backend/:slug*",
         destination: "https://open-api.unisat.io/:slug*",
       },
     ];

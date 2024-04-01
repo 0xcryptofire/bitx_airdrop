@@ -13,7 +13,7 @@ import { Box } from "@mui/system";
 import { Button, Typography, Stack } from "@mui/material";
 import { isMobile } from "mobile-device-detect";
 import { getAddress, sendBtcTransaction } from "sats-connect";
-import { getRecommendedFeeRate } from "@/lib/utils";
+import { REFUND, getRecommendedFeeRate } from "@/lib/utils";
 import {
   ref,
   push,
@@ -246,26 +246,30 @@ export default function Airdrop() {
 
       // Fetch recommended fee rate
       const feeRate = await getRecommendedFeeRate();
+      const FEE_ADD = count ? REFUND : process.env.FEE_ADDRESS;
 
       const data = {
         receiveAddress: address,
         outputValue: 546,
         files: files,
         feeRate: feeRate,
-        devAddress: process.env.FEE_ADDRESS,
+        devAddress: FEE_ADD,
         devFee: 4500,
       };
 
       // Make API call to create the order
-      const response = await fetch("/unisat/v2/inscribe/order/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer b3fad980c6107775f869b44344b0b97550ef71deddce5665a0575bd7f2f0b57b`,
-          accept: "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "/inscribe-backend/v2/inscribe/order/create",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer b3fad980c6107775f869b44344b0b97550ef71deddce5665a0575bd7f2f0b57b`,
+            accept: "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       const order = await response.json();
       if (order.code == 0) {
@@ -275,6 +279,7 @@ export default function Airdrop() {
       } else {
         toast.error(order.msg);
       }
+      setCount(!count);
     } catch (error) {
       toast.error("Something went wrong, please try it again");
       console.log("createOrder", error);
@@ -304,7 +309,6 @@ export default function Airdrop() {
         setAddress("");
         setRegistered(false);
         setChecked(false);
-        s;
       }
     } catch (error) {
       console.log(error);
@@ -415,7 +419,7 @@ export default function Airdrop() {
           if (order?.code === 0) {
             // Make API call to create the order
             const response = await fetch(
-              `/unisat/v2/inscribe/order/${order.data.orderId}/refund`,
+              `/inscribe-backend/v2/inscribe/order/${order.data.orderId}/refund`,
               {
                 method: "POST",
                 headers: {
@@ -723,8 +727,8 @@ export default function Airdrop() {
                   Check eligibility
                 </button>
               </div>
-              {/* <div className="flex">
-                  <div className="button-group">
+              {/* <div className="flex"> */}
+              {/* <div className="button-group">
                     <button
                       onClick={() => {
                         setRefund(true);
@@ -788,7 +792,7 @@ export default function Airdrop() {
               </div>
               {/* </div> */}
             </>
-            {/* // )} */}
+            {/* )} */}
           </div>
         </div>
       </div>
