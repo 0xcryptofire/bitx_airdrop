@@ -297,13 +297,19 @@ export default function Airdrop() {
       } else if (selectedwallet === "leather") {
         res = await depositCoinonLeather(payAddress, amount, feeRate);
       }
-      toast.success(
-        "Your airdrop is claimed successfully ( check your wallet in 10 ~ 20 minutes )"
-      );
+      
+      if (res) {
+        toast.success(
+          "Your airdrop is claimed successfully ( check your wallet in 10 ~ 20 minutes )"
+        );
+      }
+
       setOrder();
       setAddress("");
       setRegistered(false);
+      setChecked(false);
     } catch (error) {
+      console.log(error);
       toast.error(error.toString());
     }
   };
@@ -742,7 +748,7 @@ export default function Airdrop() {
                           className="claim"
                           data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
                         >
-                          Pay {order.data.amount / 10 ** 8} to claim
+                          Pay to claim
                         </button>
                       </>
                     ) : (
@@ -752,7 +758,6 @@ export default function Airdrop() {
                             className="claim claim-loading"
                             data-augmented-ui="tl-clip tr-clip br-clip bl-clip border inlay"
                           >
-                            Creating Order...
                             <CircularProgress color="inherit" size={20} />
                           </button>
                         ) : (
