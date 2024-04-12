@@ -1,9 +1,9 @@
-import Airdrop from '../components/Airdrop'
+import Presale from '../components/Airdrop'
 
 export default function Home() {
   return (
     <>
-      <Airdrop />
+      <Presale />
     </>
   )
 }

@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
@@ -703,4 +707,13 @@ a {
 }
 .text-white {
   color: white;
+}
+
+.clip-center {
+  top: 0;
+  position: absolute;
+  height: 100px;
+  width: 100px;
+  background-color: red;
+  transform: rotate(180deg);
 }
