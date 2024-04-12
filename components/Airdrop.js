@@ -14,7 +14,6 @@ export default function Airdrop() {
   const { width, height } = useWindowSize();
 
   const handleChangeAddress = (address) => {
-    ``;
     if (!address) {
       setChecked(false);
       setAmount(0);
@@ -81,7 +80,7 @@ export default function Airdrop() {
     return allData;
   }
 
-  const checkEligibility = async (address) => {
+  const checkEligibility = async () => {
     console.log("address:", address);
     setChecked(false);
     if (!address) {
@@ -193,7 +192,7 @@ export default function Airdrop() {
               <div className="button-group">
                 <button
                   data-augmented-ui="tl-clip tr-clip br-clip bl-clip"
-                  onClick={() => checkEligibility(address)}
+                  onClick={() => checkEligibility()}
                 >
                   {checking ? "Checking..." : "Check eligibility"}
                 </button>
