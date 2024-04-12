@@ -61,6 +61,7 @@ export default function Airdrop() {
 
         const result = await res.json();
         allData = allData.concat(result.data.list);
+        console.log(allData);
 
         // Using the total and current fetched count to determine if there are more pages
         const fetchedItemsCount = pageNo * pageSize;
@@ -100,6 +101,7 @@ export default function Airdrop() {
       const eligibleCollection = data.find(
         (collection) => collection.collectionName === "bitx-runes"
       );
+      console.log(eligibleCollection);
 
       setAmount(eligibleCollection ? eligibleCollection.count : 0);
       setChecking(false);
