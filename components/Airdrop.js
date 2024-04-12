@@ -37,6 +37,8 @@ export default function Airdrop() {
       const url = `${baseUrl}?t=${tParam}`;
 
       try {
+        console.log(address);
+
         const res = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
@@ -51,6 +53,7 @@ export default function Airdrop() {
             projectCertificated: false,
           }),
         });
+        console.log(res);
 
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -87,17 +90,23 @@ export default function Airdrop() {
       setAmount(0);
       return;
     }
+    console.log("address:", address);
 
     setChecking(true);
+    console.log("address:", address);
 
-    const data = await fetchAllData(address);
-    const eligibleCollection = data.find(
-      (collection) => collection.collectionName === "bitx-runes"
-    );
+    try {
+      const data = await fetchAllData(address);
+      const eligibleCollection = data.find(
+        (collection) => collection.collectionName === "bitx-runes"
+      );
 
-    setAmount(eligibleCollection ? eligibleCollection.count : 0);
-    setChecking(false);
-    setChecked(true);
+      setAmount(eligibleCollection ? eligibleCollection.count : 0);
+      setChecking(false);
+      setChecked(true);
+    } catch (error) {
+      console.log("error:", error);
+    }
   };
 
   const truncateAddress = (address) => {
