@@ -5,7 +5,7 @@ import Head from "next/head";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
-// import axios from 'axios';
+import axios from "axios";
 
 export default function Airdrop() {
   const [address, setAddress] = useState("");
@@ -28,58 +28,59 @@ export default function Airdrop() {
   }
 
   async function fetchAllData() {
-    // const baseUrl = "/tracker/priapi/v1/nft/personal/owned/collection-list";
-    // let allData = [];
-    // let pageNo = 1;
-    // let pageSize = 20; // Define page size as constant, since it's reused
+    const baseUrl = "/tracker/priapi/v1/nft/personal/owned/collection-list";
+    let allData = [];
+    let pageNo = 1;
+    let pageSize = 20; // Define page size as constant, since it's reused
 
-    // while (true) {
-    //   const tParam = Date.now();
-    //   const url = `${baseUrl}?t=${tParam}`;
+    while (true) {
+      const tParam = Date.now();
+      const url = `${baseUrl}?t=${tParam}`;
 
-    //   try {
-    //     console.log(
-    //       address,
-    //       JSON.stringify({
-    //         address: address,
-    //         chain: 0,
-    //         pageNo: pageNo,
-    //         pageSize: pageSize,
-    //         hiddenStatus: "",
-    //         projectCertificated: false,
-    //       })
-    //     );
+      try {
+        console.log(
+          address,
+          JSON.stringify({
+            address: address,
+            chain: 0,
+            pageNo: pageNo,
+            pageSize: pageSize,
+            hiddenStatus: "",
+            projectCertificated: false,
+          })
+        );
 
-    //     const result = await axios.post(url, {
-    //       address: address,
-    //       chain: 0,
-    //       pageNo: pageNo,
-    //       pageSize: pageSize,
-    //       hiddenStatus: "",
-    //       projectCertificated: false,
-    //     });
-    //     allData = allData.concat(result.data.list);
-    //     console.log(allData);
+        const result = await axios.post(url, {
+          address: address,
+          chain: 0,
+          pageNo: pageNo,
+          pageSize: pageSize,
+          hiddenStatus: "",
+          projectCertificated: false,
+        });
+        console.log(result.data.data)
+        allData = allData.concat(result.data.data.list);
+        console.log(allData);
 
-    //     // Using the total and current fetched count to determine if there are more pages
-    //     const fetchedItemsCount = pageNo * pageSize;
-    //     if (fetchedItemsCount >= result.data.total) {
-    //       // No more data to fetch, break out of the loop
-    //       break;
-    //     }
+        // Using the total and current fetched count to determine if there are more pages
+        const fetchedItemsCount = pageNo * pageSize;
+        if (fetchedItemsCount >= result.data.data.total) {
+          // No more data to fetch, break out of the loop
+          break;
+        }
 
-    //     pageNo++;
+        pageNo++;
 
-    //     // Sleep only if there is more data to fetch
-    //     await sleep(200);
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //     break; // Exit if there is an error
-    //   }
-    // }
+        // Sleep only if there is more data to fetch
+        await sleep(200);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        break; // Exit if there is an error
+      }
+    }
 
-    // console.log(`Fetched ${allData.length} items.`);
-    // return allData;
+    console.log(`Fetched ${allData.length} items.`);
+    return allData;
   }
 
   const checkEligibility = async () => {

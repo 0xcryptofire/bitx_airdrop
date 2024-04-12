@@ -1,9 +1,9 @@
 :root {
   --max-width: 1100px;
   --border-radius: 12px;
-  --font-mono: ui-monospace, Menlo, Monaco, "Cascadia Mono", "Segoe UI Mono",
-    "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", "Source Code Pro",
-    "Fira Mono", "Droid Sans Mono", "Courier New", monospace;
+  --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
+    'Roboto Mono', 'Oxygen Mono', 'Ubuntu Monospace', 'Source Code Pro',
+    'Fira Mono', 'Droid Sans Mono', 'Courier New', monospace;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -74,38 +74,38 @@
 }
 
 @font-face {
-  font-family: "NippoBold";
-  src: local("NippoBold"), url(../public/fonts/NippoBold.ttf) format("opentype");
+  font-family: 'NippoBold';
+  src: local('NippoBold'), url(../public/fonts/NippoBold.ttf) format('opentype');
 }
 
 @font-face {
-  font-family: "NippoExtralight";
-  src: local("NippoExtralight"),
-    url(../public/fonts/NippoExtralight.ttf) format("opentype");
+  font-family: 'NippoExtralight';
+  src: local('NippoExtralight'),
+    url(../public/fonts/NippoExtralight.ttf) format('opentype');
 }
 
 @font-face {
-  font-family: "NippoLight";
-  src: local("NippoLight"),
-    url(../public/fonts/NippoLight.ttf) format("opentype");
+  font-family: 'NippoLight';
+  src: local('NippoLight'),
+    url(../public/fonts/NippoLight.ttf) format('opentype');
 }
 
 @font-face {
-  font-family: "NippoMedium";
-  src: local("NippoMedium"),
-    url(../public/fonts/NippoMedium.ttf) format("opentype");
+  font-family: 'NippoMedium';
+  src: local('NippoMedium'),
+    url(../public/fonts/NippoMedium.ttf) format('opentype');
 }
 
 @font-face {
-  font-family: "NippoRegular";
-  src: local("NippoRegular"),
-    url(../public/fonts/NippoRegular.ttf) format("opentype");
+  font-family: 'NippoRegular';
+  src: local('NippoRegular'),
+    url(../public/fonts/NippoRegular.ttf) format('opentype');
 }
 
 @font-face {
-  font-family: "NippoVariable";
-  src: local("NippoVariable"),
-    url(../public/fonts/NippoVariable.ttf) format("opentype");
+  font-family: 'NippoVariable';
+  src: local('NippoVariable'),
+    url(../public/fonts/NippoVariable.ttf) format('opentype');
 }
 
 * {
@@ -148,7 +148,7 @@ a {
 
 .nav-bar .logo {
   color: black !important;
-  font-family: "NippoMedium" !important;
+  font-family: 'NippoMedium' !important;
   font-size: 2rem;
 }
 
@@ -180,7 +180,7 @@ a {
   /* background: radial-gradient(ellipse at top, #140f00, #141619), radial-gradient(ellipse at bottom, #141619, #141619);  */
   /* animation: gradient 15s ease infinite; */
   height: 100vh;
-  background: url("https://robertsspaceindustries.com/rsi/static/images/gridbg_glow.png")
+  background: url('https://robertsspaceindustries.com/rsi/static/images/gridbg_glow.png')
     repeat !important;
   background-size: contain;
   /* filter: invert(); */
@@ -201,7 +201,7 @@ a {
   /* background: radial-gradient(ellipse at top, #140f00, #141619), radial-gradient(ellipse at bottom, #141619, #141619);  */
   /* animation: gradient 15s ease infinite; */
   height: 100vh;
-  background-image: url("../public/lines.svg");
+  background-image: url('../public/lines.svg');
   background-size: contain;
   filter: invert();
   background-position: center;
@@ -213,7 +213,7 @@ a {
 
 .bg-text {
   font-size: 22vw;
-  font-family: "NippoBold";
+  font-family: 'NippoBold';
   position: absolute;
   bottom: 0;
 }
@@ -288,13 +288,13 @@ a {
   padding-bottom: 10px;
 }
 .input-balance {
-  font-family: "NippoMedium";
+  font-family: 'NippoMedium';
   font-size: 0.7rem;
   color: #41464b;
 }
 
 .input-title {
-  font-family: "NippoMedium";
+  font-family: 'NippoMedium';
   font-size: 1.2rem;
   color: #41464b;
 }
@@ -322,7 +322,7 @@ a {
   justify-content: space-between;
   /* padding: 0.9em; */
   border-radius: 10px;
-  font-family: "NippoBold";
+  font-family: 'NippoBold';
   font-size: 6rem;
   /* border: solid 1px rgb(255 255 255 / 12%); */
 }
@@ -385,7 +385,7 @@ a {
   /* border-radius: 10px; */
   padding: 15px 30px;
   min-width: 120px;
-  font-family: "NippoBold";
+  font-family: 'NippoBold';
   color: black;
   text-transform: uppercase;
   background-color: white;
@@ -394,7 +394,7 @@ a {
 }
 
 .button-group .claim {
-  box-sizing: border-box;
+box-sizing: border-box;
   margin: 0;
   border: none;
   outline: none;
@@ -411,7 +411,7 @@ a {
   color: #fff;
   text-transform: uppercase;
   background-color: #000;
-  transition: background-color 0.1s ease 0s;
+  transition: background-color .1s ease 0s;
   --aug-border-bg: #fff;
   --aug-border-all: 1px;
   --aug-inlay-bg: transparent;
@@ -439,11 +439,11 @@ a {
   font-weight: 400;
   line-height: 1.6em;
   color: white;
-  font-family: "NippoMedium";
+  font-family: 'NippoMedium';
 }
 
 .info {
-  font-family: "NippoLight";
+  font-family: 'NippoLight';
   color: white;
 }
 
@@ -582,7 +582,7 @@ a {
   line-height: 1em;
   font-size: 20px;
   min-width: 120px;
-  font-family: "NippoMedium";
+  font-family: 'NippoMedium';
   text-transform: uppercase;
 }
 
@@ -668,21 +668,21 @@ a {
   }
 }
 
-.logo {
+.logo  {
   width: 50px;
   height: 50px;
 }
 
 .connector {
-  font-size: 16px !important;
-  margin-left: 12px !important;
-  padding-top: 12px !important;
-  padding-bottom: 12px !important;
-  font-weight: 800 !important;
+  font-size: 16px!important;
+  margin-left: 12px!important;
+  padding-top: 12px!important;
+  padding-bottom: 12px!important;
+  font-weight: 800!important;
 }
 
 .claim-loading {
-  font-weight: 700 !important;
+  font-weight: 700!important;
   gap: 10px;
   display: flex;
   justify-content: center;
@@ -697,10 +697,4 @@ a {
 
 .refund {
   /* color: rgba(182, 11, 11, 0.788)!important; */
-}
-.text-green-500 {
-  color: rgb(22, 235, 22);
-}
-.text-white {
-  color: white;
 }
