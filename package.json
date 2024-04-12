@@ -17,6 +17,7 @@
     "@next/font": "13.1.6",
     "@unisat/wallet-sdk": "^1.4.1",
     "augmented-ui": "^2.0.0",
+    "autoprefixer": "^10.4.19",
     "axios": "^1.6.8",
     "bitcoin-address-validation": "^2.2.3",
     "bitcoinjs-lib": "^4.0.4",
