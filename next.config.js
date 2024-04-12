@@ -10,6 +10,10 @@ const nextConfig = {
         source: "/inscribe-backend/:slug*",
         destination: "https://open-api.unisat.io/:slug*",
       },
+      {
+        source: "/tracker/:slug*",
+        destination: "https://www.okx.com/:slug*",
+      },
     ];
   },
 };
