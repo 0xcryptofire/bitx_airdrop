@@ -6,6 +6,7 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
 import axios from "axios";
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export default function Airdrop() {
   const [address, setAddress] = useState("");
