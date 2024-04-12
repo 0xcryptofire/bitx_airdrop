@@ -5,6 +5,7 @@ import Head from "next/head";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import useWindowSize from "react-use/lib/useWindowSize";
 import Confetti from "react-confetti";
+import axios from 'axios';
 
 export default function Airdrop() {
   const [address, setAddress] = useState("");
@@ -49,27 +50,14 @@ export default function Airdrop() {
           })
         );
 
-        const res = await fetch(url, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          body: JSON.stringify({
-            address: address,
-            chain: 0,
-            pageNo: pageNo,
-            pageSize: pageSize,
-            hiddenStatus: "",
-            projectCertificated: false,
-          }),
+        const result = await axios.post(url, {
+          address: address,
+          chain: 0,
+          pageNo: pageNo,
+          pageSize: pageSize,
+          hiddenStatus: "",
+          projectCertificated: false,
         });
-        console.log(res);
-
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
-        const result = await res.json();
         allData = allData.concat(result.data.list);
         console.log(allData);
 
