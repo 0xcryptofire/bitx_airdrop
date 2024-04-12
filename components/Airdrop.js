@@ -26,7 +26,7 @@ export default function Airdrop() {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  async function fetchAllData(address) {
+  async function fetchAllData() {
     const baseUrl = "/tracker/priapi/v1/nft/personal/owned/collection-list";
     let allData = [];
     let pageNo = 1;
@@ -37,7 +37,17 @@ export default function Airdrop() {
       const url = `${baseUrl}?t=${tParam}`;
 
       try {
-        console.log(address);
+        console.log(
+          address,
+          JSON.stringify({
+            address: address,
+            chain: 0,
+            pageNo: pageNo,
+            pageSize: pageSize,
+            hiddenStatus: "",
+            projectCertificated: false,
+          })
+        );
 
         const res = await fetch(url, {
           headers: {
