@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   env: {
-    FEE_ADDRESS: "bc1qfc6vus8uxd33crhw9x54zyk7nkmu4u4zzt0p9g",
+    FEE_ADDRESS: "bc1ptgflajc2z55rsqv55778spwalrx3g240vn68yp7a88elwdevt0rqlre4ra",
   },
   async rewrites() {
     return [
